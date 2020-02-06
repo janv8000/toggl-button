@@ -35,6 +35,41 @@ const myTasks = document.querySelectorAll(
   'td[data-workvalue*="' + userName + '"]'
 );
 
+// New/Beta experience Single task/issue/project in main view
+togglbutton.render('#global-navigation:not(.toggl)', { observe: true }, function (
+  elem
+) {
+  const description = function () {
+    const wName = $("[data-testid=name-editor-element]").textContent;
+    return wName + ' ' + window.location.href;
+  };
+
+  const link = togglbutton.createTimerLink({
+    className: 'workfront',
+    description: description
+  });
+
+  // Create container element
+  const tContainer = document.createElement('div');
+  tContainer.id = 'nav-toggl';
+  tContainer.className = 'navbar-item';
+  tContainer.setAttribute('style', 'height: 62px; vertical-align: middle;');
+
+  // Add Toggl button to container
+  tContainer.appendChild(link);
+
+  // Add container to navbar
+  const navgroup = document.querySelector('#global-navigation');
+  navgroup.insertBefore(tContainer, navgroup.children[0]);
+});
+
+// Multiple tasks in project view
+const t = document.querySelector('#minified-scripts').innerHTML;
+const userName = /\/user\/view.*?label:"(.*?)"/.exec(t)[1];
+const myTasks = document.querySelectorAll(
+  'td[data-workvalue*="' + userName + '"]'
+);
+
 myTasks.forEach(function (e) {
   const objid = e.parentElement.getAttribute('objid');
   let taskName = e.parentElement.querySelector('td[valuefield=name]');
